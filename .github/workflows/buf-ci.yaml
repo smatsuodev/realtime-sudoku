@@ -2,7 +2,7 @@ name: Buf CI
 on:
   push:
     paths:
-      - **.proto
+      - "**.proto"
       - buf.yaml
       - buf.gen.yaml
       - buf.lock
