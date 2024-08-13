@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-package sudoku;
+package sudoku.v1;
 
 message Board {
   repeated Row rows = 1;
@@ -12,5 +12,5 @@ message Row {
 
 message Cell {
   uint32 value = 1;
-  bool isConst = 2;
+  bool is_const = 2;
 }
