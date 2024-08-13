@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-package sudoku.entites.v1;
+package sudoku.entities.v1;
 
 import "sudoku/entities/v1/board.proto";
 import "sudoku/entities/v1/user.proto";
