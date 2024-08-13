@@ -1,0 +1,36 @@
+services:
+  app:
+    container_name: sudoku-app
+    # Go 1.22.5 に対応するイメージが latest タグしか付いてない
+    image: cosmtrek/air:latest
+    restart: unless-stopped
+    depends_on:
+      - db
+    working_dir: /app
+    ports:
+      - "127.0.0.1:3000:3000"
+    volumes:
+      - ./app:/app
+    command: ["-build.cmd", "go build -o ./tmp/main ./cmd"]
+
+  db:
+    container_name: sudoku-db
+    image: postgres:16.4
+    restart: unless-stopped
+    ports:
+      # 開発時は利便性のためポートを露出させる
+      - "127.0.0.1:5432:5432"
+    environment:
+      POSTGRES_USER: sudoku
+      POSTGRES_PASSWORD: sudoku
+      POSTGRES_DB: sudoku
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U sudoku"]
+      interval: 5s
+      timeout: 60s
+      retries: 5
+
+volumes:
+  pgdata:
