@@ -13,15 +13,15 @@ import 'dart:core' as $core;
 
 import 'package:protobuf/protobuf.dart' as $pb;
 
-import 'board.pb.dart' as $1;
-import 'user.pb.dart' as $0;
+import 'board.pb.dart' as $2;
+import 'user.pb.dart' as $1;
 
 class Room extends $pb.GeneratedMessage {
   factory Room({
     $core.int? id,
     $core.String? name,
-    $core.Iterable<$0.User>? players,
-    $1.Board? board,
+    $core.Iterable<$1.User>? players,
+    $2.Board? board,
   }) {
     final $result = create();
     if (id != null) {
@@ -45,8 +45,8 @@ class Room extends $pb.GeneratedMessage {
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'Room', package: const $pb.PackageName(_omitMessageNames ? '' : 'sudoku.entities.v1'), createEmptyInstance: create)
     ..a<$core.int>(1, _omitFieldNames ? '' : 'id', $pb.PbFieldType.OU3)
     ..aOS(2, _omitFieldNames ? '' : 'name')
-    ..pc<$0.User>(3, _omitFieldNames ? '' : 'players', $pb.PbFieldType.PM, subBuilder: $0.User.create)
-    ..aOM<$1.Board>(4, _omitFieldNames ? '' : 'board', subBuilder: $1.Board.create)
+    ..pc<$1.User>(3, _omitFieldNames ? '' : 'players', $pb.PbFieldType.PM, subBuilder: $1.User.create)
+    ..aOM<$2.Board>(4, _omitFieldNames ? '' : 'board', subBuilder: $2.Board.create)
     ..hasRequiredFields = false
   ;
 
@@ -90,18 +90,18 @@ class Room extends $pb.GeneratedMessage {
   void clearName() => clearField(2);
 
   @$pb.TagNumber(3)
-  $core.List<$0.User> get players => $_getList(2);
+  $core.List<$1.User> get players => $_getList(2);
 
   @$pb.TagNumber(4)
-  $1.Board get board => $_getN(3);
+  $2.Board get board => $_getN(3);
   @$pb.TagNumber(4)
-  set board($1.Board v) { setField(4, v); }
+  set board($2.Board v) { setField(4, v); }
   @$pb.TagNumber(4)
   $core.bool hasBoard() => $_has(3);
   @$pb.TagNumber(4)
   void clearBoard() => clearField(4);
   @$pb.TagNumber(4)
-  $1.Board ensureBoard() => $_ensure(3);
+  $2.Board ensureBoard() => $_ensure(3);
 }
 
 
