@@ -1,0 +1,13 @@
+syntax = "proto3";
+
+package sudoku;
+
+import "user.proto";
+import "board.proto";
+
+message Room {
+  uint32 id = 1;
+  string name = 2;
+  repeated User players = 3;
+  Board board = 4;
+}

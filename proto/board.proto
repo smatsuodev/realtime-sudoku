@@ -1,0 +1,12 @@
+syntax = "proto3";
+
+package sudoku;
+
+message Board { repeated Row rows = 1; }
+
+message Row { repeated Cell cells = 1; }
+
+message Cell {
+  uint32 value = 1;
+  bool isConst = 2;
+}
