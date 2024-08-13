@@ -14,7 +14,7 @@ plugins:
   - remote: buf.build/protocolbuffers/go
     out: backend/gen
     opt:
-      - paths=source_relativee
+      - paths=source_relative
   - remote: buf.build/protocolbuffers/dart:v21.1.2
     out: frontend/lib/gen
     opt:
