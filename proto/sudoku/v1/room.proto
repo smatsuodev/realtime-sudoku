@@ -1,9 +1,9 @@
 syntax = "proto3";
 
-package sudoku;
+package sudoku.v1;
 
-import "board.proto";
-import "user.proto";
+import "sudoku/v1/board.proto";
+import "sudoku/v1/user.proto";
 
 message Room {
   uint32 id = 1;

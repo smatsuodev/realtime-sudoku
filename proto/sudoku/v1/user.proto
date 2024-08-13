@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-package sudoku;
+package sudoku.v1;
 
 message User {
   uint32 id = 1;
