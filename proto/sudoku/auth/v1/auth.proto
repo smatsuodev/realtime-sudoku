@@ -1,0 +1,29 @@
+syntax = "proto3";
+
+package sudoku.auth.v1;
+
+service AuthService {
+  // ログインセッションの付与はここではなく callback で行う
+  rpc SignIn(SignInRequest) returns (SignInResponse);
+  rpc SignOut(SignOutRequest) returns (SignOutResponse);
+}
+
+// buf:lint:ignore ENUM_VALUE_PREFIX
+// prefix を O_AUTH_PROVIDER にするよう怒られるので無視
+enum OAuthProvider {
+  OAUTH_PROVIDER_UNSPECIFIED = 0;
+  OAUTH_PROVIDER_GITHUB = 1;
+}
+
+message SignInRequest {
+  OAuthProvider provider = 1;
+}
+
+message SignInResponse {
+  // クライアントはこの URL にリダイレクトして, フローを開始する
+  string authorization_url = 1;
+}
+
+message SignOutRequest {}
+
+message SignOutResponse {}
