@@ -1,0 +1,8 @@
+syntax = "proto3";
+
+package sudoku.entities.v1;
+
+message User {
+  uint32 id = 1;
+  string name = 2;
+}

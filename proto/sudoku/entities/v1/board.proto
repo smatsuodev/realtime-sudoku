@@ -1,0 +1,16 @@
+syntax = "proto3";
+
+package sudoku.entities.v1;
+
+message Board {
+  repeated Row rows = 1;
+}
+
+message Row {
+  repeated Cell cells = 1;
+}
+
+message Cell {
+  uint32 value = 1;
+  bool is_const = 2;
+}
