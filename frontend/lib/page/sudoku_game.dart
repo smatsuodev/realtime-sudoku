@@ -2,6 +2,81 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 class SudokuApp extends StatefulWidget {
 
+class SudokuGrid extends StatefulWidget {
+  final bool isNoteMode;
+
+  SudokuGrid({required this.isNoteMode});
+
+  @override
+  _SudokuGridState createState() => _SudokuGridState();
+}
+
+class _SudokuGridState extends State<SudokuGrid> {
+  final List<List<int>> sudokuBoard = List.generate(9, (_) => List.generate(9, (_) => 0));
+  final List<List<Set<int>>> notes = List.generate(9, (_) => List.generate(9, (_) => <int>{}));
+
+  @override
+  Widget build(BuildContext context) {
+    double screenWidth = MediaQuery.of(context).size.width;
+    double screenHeight = MediaQuery.of(context).size.height;
+    double availableHeight = screenHeight - kToolbarHeight - MediaQuery.of(context).padding.top - 16.0;
+    double gridSize = screenWidth < availableHeight ? screenWidth : availableHeight;
+
+    return Center(
+      child: Container(
+        width: gridSize,
+        height: gridSize,
+        padding: const EdgeInsets.all(8.0),
+        child: GridView.builder(
+          itemCount: 81,
+          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: 9,
+            childAspectRatio: 1.0,
+          ),
+          itemBuilder: (context, index) {
+            int row = index ~/ 9;
+            int col = index % 9;
+            return SudokuCell(
+              value: sudokuBoard[row][col],
+              notes: notes[row][col],
+              isNoteMode: widget.isNoteMode,
+              onChanged: (newValue) {
+                setState(() {
+                  if (widget.isNoteMode) {
+                    // Add or remove notes based on the user's input
+                    for (int note in newValue) {
+                      if (notes[row][col].contains(note)) {
+                        notes[row][col].remove(note);
+                      } else {
+                        notes[row][col].add(note);
+                      }
+                    }
+                  } else {
+                    if (newValue == [0]) {
+                      // Clear the cell and show the previous notes
+                      sudokuBoard[row][col] = 0;
+                    } else {
+                      // Set the answer and clear the notes
+                      sudokuBoard[row][col] = newValue.first;
+                      // notes[row][col].clear();
+                    }
+                  }
+                });
+              },
+              onCleared: () {
+                setState(() {
+                  // When the cell is cleared, make sure the notes become visible again
+                  sudokuBoard[row][col] = 0;
+                });
+              },
+            );
+          },
+        ),
+      ),
+    );
+  }
+}
+
 class SudokuCell extends StatelessWidget {
   final int value;
   final Set<int> notes;
