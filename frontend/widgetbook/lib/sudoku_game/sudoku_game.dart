@@ -50,3 +50,8 @@ Widget buildSudokuGridAnswerUseCase(BuildContext context) {
 Widget buildSudokuGridNoteUseCase(BuildContext context) {
   return SudokuGrid(isNoteMode: true);
 }
+
+@widgetbook.UseCase(name: 'SudokuApp', type: SudokuApp)
+Widget buildSudokuAppUseCase(BuildContext context) {
+  return SudokuApp();
+}

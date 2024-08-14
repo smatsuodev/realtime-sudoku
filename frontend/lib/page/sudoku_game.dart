@@ -1,6 +1,56 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+
 class SudokuApp extends StatefulWidget {
+  @override
+  _SudokuAppState createState() => _SudokuAppState();
+}
+
+
+class _SudokuAppState extends State<SudokuApp> {
+  bool isNoteMode = false;
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      home: Scaffold(
+        appBar: AppBar(
+          title: Text('Sudoku'),
+          actions: [
+            IconButton(
+              icon: Icon(isNoteMode ? Icons.note : Icons.edit),
+              onPressed: toggleMode,
+            ),
+          ],
+        ),
+        body: Shortcuts(
+          shortcuts: {
+            LogicalKeySet(LogicalKeyboardKey.space): ToggleModeIntent(),
+          },
+          child: Actions(
+            actions: {
+              ToggleModeIntent: CallbackAction<ToggleModeIntent>(
+                onInvoke: (intent) => toggleMode(),
+              ),
+            },
+            child: Focus(
+              autofocus: true,
+              child: SudokuGrid(isNoteMode: isNoteMode),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  void toggleMode() {
+    setState(() {
+      isNoteMode = !isNoteMode;
+    });
+  }
+}
+
+class ToggleModeIntent extends Intent {}
 
 class SudokuGrid extends StatefulWidget {
   final bool isNoteMode;

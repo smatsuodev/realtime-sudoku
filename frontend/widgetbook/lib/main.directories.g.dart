@@ -11,7 +11,7 @@
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'package:widgetbook/widgetbook.dart' as _i1;
 import 'package:widgetbook_workspace/examples/cool_button.dart' as _i2;
-import 'package:widgetbook_workspace/examples/sudoku_game.dart' as _i3;
+import 'package:widgetbook_workspace/sudoku_game/sudoku_game.dart' as _i3;
 
 final directories = <_i1.WidgetbookNode>[
   _i1.WidgetbookFolder(
@@ -57,6 +57,13 @@ final directories = <_i1.WidgetbookNode>[
         useCase: _i1.WidgetbookUseCase(
           name: 'SudokuGrid(Note mode)',
           builder: _i3.buildSudokuGridNoteUseCase,
+        ),
+      ),
+      _i1.WidgetbookLeafComponent(
+        name: 'SudokuApp',
+        useCase: _i1.WidgetbookUseCase(
+          name: 'SudokuApp',
+          builder: _i3.buildSudokuAppUseCase,
         ),
       ),
     ],
