@@ -31,6 +31,20 @@ final directories = <_i1.WidgetbookNode>[
           builder: _i3.buildNumberInputDialogNoteUseCase,
         ),
       ),
+      _i1.WidgetbookLeafComponent(
+        name: 'SudokuCell(Answer mode)',
+        useCase: _i1.WidgetbookUseCase(
+          name: 'SudokuCell(Answer mode)',
+          builder: _i3.buildSudokuCellAnswerUseCase,
+        ),
+      ),
+      _i1.WidgetbookLeafComponent(
+        name: 'SudokuCell(Note mode)',
+        useCase: _i1.WidgetbookUseCase(
+          name: 'SudokuCell(Note mode)',
+          builder: _i3.buildSudokuCellNoteUseCase,
+        ),
+      ),
     ],
   )
 ];

@@ -11,3 +11,32 @@ Widget buildNumberInputDialogAnswerUseCase(BuildContext context) {
 Widget buildNumberInputDialogNoteUseCase(BuildContext context) {
   return NumberInputDialog(isNoteMode: true);
 }
+
+@widgetbook.UseCase(name: 'SudokuCell(Answer mode)', type: SudokuCell)
+Widget buildSudokuCellAnswerUseCase(BuildContext context) {
+  int value = 0;
+  Set<int> notes = <int>{};
+  bool isNoteMode = false;
+  return SudokuCell(
+    value: value,
+    notes: notes,
+    isNoteMode: isNoteMode,
+    onChanged: (_) { return List.generate(9, (_) => <int>{});},
+    onCleared: (_){},
+    );
+}
+
+
+@widgetbook.UseCase(name: 'SudokuCell(Note mode)', type: SudokuCell)
+Widget buildSudokuCellNoteUseCase(BuildContext context) {
+  int value = 0;
+  Set<int> notes = <int>{};
+  bool isNoteMode = true;
+  return SudokuCell(
+    value: value,
+    notes: notes,
+    isNoteMode: isNoteMode,
+    onChanged: (_) { return List.generate(9, (_) => <int>{});},
+    onCleared: (_){},
+    );
+}
