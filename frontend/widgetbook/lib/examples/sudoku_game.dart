@@ -40,3 +40,13 @@ Widget buildSudokuCellNoteUseCase(BuildContext context) {
     onCleared: (_){},
     );
 }
+
+@widgetbook.UseCase(name: 'SudokuGrid(Answer mode)', type: SudokuGrid)
+Widget buildSudokuGridAnswerUseCase(BuildContext context) {
+  return SudokuGrid(isNoteMode: false);
+}
+
+@widgetbook.UseCase(name: 'SudokuGrid(Note mode)', type: SudokuGrid)
+Widget buildSudokuGridNoteUseCase(BuildContext context) {
+  return SudokuGrid(isNoteMode: true);
+}

@@ -45,6 +45,20 @@ final directories = <_i1.WidgetbookNode>[
           builder: _i3.buildSudokuCellNoteUseCase,
         ),
       ),
+      _i1.WidgetbookLeafComponent(
+        name: 'SudokuGrid(Answer mode)',
+        useCase: _i1.WidgetbookUseCase(
+          name: 'SudokuGrid(Answer mode)',
+          builder: _i3.buildSudokuGridAnswerUseCase,
+        ),
+      ),
+      _i1.WidgetbookLeafComponent(
+        name: 'SudokuGrid(Note mode)',
+        useCase: _i1.WidgetbookUseCase(
+          name: 'SudokuGrid(Note mode)',
+          builder: _i3.buildSudokuGridNoteUseCase,
+        ),
+      ),
     ],
   )
 ];
