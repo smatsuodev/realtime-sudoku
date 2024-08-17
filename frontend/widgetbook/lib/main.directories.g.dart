@@ -11,8 +11,10 @@
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'package:widgetbook/widgetbook.dart' as _i1;
 import 'package:widgetbook_workspace/examples/cool_button.dart' as _i2;
-import 'package:widgetbook_workspace/presentation/page/rooms_list_page.dart'
+import 'package:widgetbook_workspace/presentation/component/create_room_button.dart'
     as _i3;
+import 'package:widgetbook_workspace/presentation/page/rooms_list_page.dart'
+    as _i4;
 
 final directories = <_i1.WidgetbookNode>[
   _i1.WidgetbookFolder(
@@ -31,17 +33,29 @@ final directories = <_i1.WidgetbookNode>[
     name: 'presentation',
     children: [
       _i1.WidgetbookFolder(
+        name: 'component',
+        children: [
+          _i1.WidgetbookLeafComponent(
+            name: 'CreateRoomButton',
+            useCase: _i1.WidgetbookUseCase(
+              name: 'Deafult',
+              builder: _i3.buildCreateRoomButton,
+            ),
+          )
+        ],
+      ),
+      _i1.WidgetbookFolder(
         name: 'page',
         children: [
           _i1.WidgetbookLeafComponent(
             name: 'RoomsListPage',
             useCase: _i1.WidgetbookUseCase(
               name: 'Deafult',
-              builder: _i3.buildCoolButtonUseCase,
+              builder: _i4.buildCoolButtonUseCase,
             ),
           )
         ],
-      )
+      ),
     ],
   ),
 ];

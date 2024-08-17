@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/domain/entity/room.dart';
+import 'package:frontend/presentation/component/create_room_button.dart';
 import 'package:frontend/presentation/component/room_preview_card.dart';
 
 class RoomsListPage extends StatelessWidget {
@@ -16,6 +17,7 @@ class RoomsListPage extends StatelessWidget {
       appBar: AppBar(
         title: const Text('ルーム一覧'),
       ),
+      floatingActionButton: const CreateRoomButton(),
       body: Center(
         child: SizedBox(
           width: 1000,
