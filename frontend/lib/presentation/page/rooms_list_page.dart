@@ -16,20 +16,23 @@ class RoomsListPage extends StatelessWidget {
         title: const Text('ルーム一覧'),
       ),
       body: Center(
-        child: GridView(
-          padding:
-              const EdgeInsets.only(left: 32, right: 32, top: 16, bottom: 16),
-          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 4,
+        child: SizedBox(
+          width: 1000,
+          child: GridView(
+            padding:
+                const EdgeInsets.only(left: 32, right: 32, top: 16, bottom: 16),
+            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 4,
+            ),
+            children: _rooms
+                .map((room) => RoomCard(
+                      roomName: room.name,
+                      onTap: () {
+                        print(room.name);
+                      },
+                    ))
+                .toList(),
           ),
-          children: _rooms
-              .map((room) => RoomCard(
-                    roomName: room.name,
-                    onTap: () {
-                      print(room.name);
-                    },
-                  ))
-              .toList(),
         ),
       ),
     );
