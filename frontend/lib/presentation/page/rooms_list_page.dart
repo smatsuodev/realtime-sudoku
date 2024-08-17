@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/domain/entity/room.dart';
+import 'package:frontend/presentation/component/room_preview_card.dart';
 
 class RoomsListPage extends StatelessWidget {
   final List<Room> _rooms;
@@ -25,48 +26,13 @@ class RoomsListPage extends StatelessWidget {
               crossAxisCount: 4,
             ),
             children: _rooms
-                .map((room) => RoomCard(
-                      roomName: room.name,
+                .map((room) => RoomPreviewCard(
+                      room: room,
                       onTap: () {
                         print(room.name);
                       },
                     ))
                 .toList(),
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-class RoomCard extends StatelessWidget {
-  final String roomName;
-  final Function() onTap;
-
-  const RoomCard({
-    super.key,
-    required this.roomName,
-    required this.onTap,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Card(
-      child: InkWell(
-        customBorder: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(8),
-        ),
-        onTap: onTap,
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Column(
-            children: [
-              const Expanded(
-                // TODO: 部屋のボードの画像を表示する
-                child: Icon(Icons.no_photography_outlined),
-              ),
-              Text(roomName),
-            ],
           ),
         ),
       ),
