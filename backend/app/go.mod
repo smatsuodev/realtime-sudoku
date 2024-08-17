@@ -10,4 +10,7 @@ require (
 	google.golang.org/protobuf v1.34.2
 )
 
-require golang.org/x/text v0.17.0 // indirect
+require (
+	github.com/caarlos0/env/v11 v11.2.2 // indirect
+	golang.org/x/text v0.17.0 // indirect
+)
