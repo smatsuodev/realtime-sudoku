@@ -36,8 +36,8 @@ final directories = <_i1.WidgetbookNode>[
           _i1.WidgetbookLeafComponent(
             name: 'RoomsListPage',
             useCase: _i1.WidgetbookUseCase(
-              name: 'Deafult',
-              builder: _i3.buildCoolButtonUseCase,
+              name: 'Default',
+              builder: _i3.buildRoomsListPage,
             ),
           )
         ],

@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:widgetbook/widgetbook.dart';
 import 'package:widgetbook_annotation/widgetbook_annotation.dart' as widgetbook;
+import 'package:widgetbook_workspace/core/extension/riverpod_integration_ext.dart';
+import 'package:widgetbook_workspace/core/util/riverpod_integration.dart';
 
 // This file does not exist yet,
 // it will be generated in the next step
@@ -17,9 +20,14 @@ class WidgetbookApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Widgetbook.material(
-      // The [directories] variable does not exist yet,
-      // it will be generated in the next step
       directories: directories,
+      appBuilder: (context, child) => UncontrolledProviderScope(
+        container: WidgetbookState.of(context).riverpodIntegration.container,
+        child: MaterialApp(home: child),
+      ),
+      integrations: [
+        RiverpodIntegration(),
+      ],
     );
   }
 }
