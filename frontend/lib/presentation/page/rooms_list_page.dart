@@ -32,11 +32,7 @@ class _RoomsListPageState extends ConsumerState<RoomsListPage> {
         title: const Text('ルーム一覧'),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          setState(() {
-            _rooms = _fetchRooms();
-          });
-        },
+        onPressed: () {},
         tooltip: 'ルームを新規作成',
         child: const Icon(Icons.add),
       ),
