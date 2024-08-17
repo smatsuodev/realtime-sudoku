@@ -23,7 +23,9 @@ class WidgetbookApp extends StatelessWidget {
       directories: directories,
       appBuilder: (context, child) => UncontrolledProviderScope(
         container: WidgetbookState.of(context).riverpodIntegration.container,
-        child: MaterialApp(home: child),
+        child: MaterialApp(
+          home: child,
+        ),
       ),
       integrations: [
         RiverpodIntegration(),
