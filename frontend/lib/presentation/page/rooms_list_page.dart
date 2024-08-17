@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:frontend/domain/entity/room.dart';
 import 'package:frontend/domain/repository/room_repository.dart';
+import 'package:frontend/presentation/component/create_room_dialog.dart';
 import 'package:frontend/presentation/component/room_preview_card.dart';
 
 class RoomsListPage extends ConsumerStatefulWidget {
@@ -32,7 +33,19 @@ class _RoomsListPageState extends ConsumerState<RoomsListPage> {
         title: const Text('ルーム一覧'),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {},
+        onPressed: () {
+          showDialog(
+            context: context,
+            builder: (context) => CreateRoomDialog(
+              onSubmit: (name) {
+                _roomRepository.createRoom(name);
+                setState(() {
+                  _rooms = _fetchRooms();
+                });
+              },
+            ),
+          );
+        },
         tooltip: 'ルームを新規作成',
         child: const Icon(Icons.add),
       ),

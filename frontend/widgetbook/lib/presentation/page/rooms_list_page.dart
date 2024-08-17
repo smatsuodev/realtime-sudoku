@@ -9,10 +9,15 @@ import 'package:widgetbook_workspace/infrastructure/repository/room_repository_i
 @widgetbook.UseCase(name: 'Default', type: RoomsListPage)
 Widget buildRoomsListPage(BuildContext context) {
   final shouldDelay = context.knobs.boolean(label: 'APIの遅延');
+  final numberOfRooms =
+      context.knobs.int.slider(label: '部屋の数', initialValue: 4, min: 0, max: 20);
+  final mockRepo = MockRoomRepositoryImpl(
+    shouldDelay: shouldDelay,
+    numberOfRooms: numberOfRooms,
+  );
+
   WidgetbookState.of(context).riverpodIntegration.overrides = [
-    roomRepositoryProvider.overrideWithValue(MockRoomRepositoryImpl(
-      shouldDelay: shouldDelay,
-    )),
+    roomRepositoryProvider.overrideWithValue(mockRepo),
   ];
   return RoomsListPage(key: UniqueKey());
 }

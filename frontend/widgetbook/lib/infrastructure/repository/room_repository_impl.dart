@@ -2,8 +2,12 @@ import 'package:frontend/domain/entity/room.dart';
 import 'package:frontend/domain/repository/room_repository.dart';
 
 class MockRoomRepositoryImpl implements RoomRepository {
-  final _rooms = List.generate(
-    16,
+  final bool shouldDelay;
+  final int delaySeconds;
+  final int numberOfRooms;
+
+  late final _rooms = List.generate(
+    numberOfRooms,
     (index) => Room(
       id: index,
       name: 'Room $index',
@@ -11,18 +15,17 @@ class MockRoomRepositoryImpl implements RoomRepository {
     ),
   );
 
-  final bool shouldDelay;
-  final int delaySeconds;
-
   MockRoomRepositoryImpl({
     this.shouldDelay = false,
     this.delaySeconds = 1,
+    this.numberOfRooms = 4,
   });
 
   @override
   Future<void> createRoom(String name) {
-    // TODO: implement createRoom
-    throw UnimplementedError();
+    return delayed<void>(() {
+      _rooms.add(Room(id: _rooms.length, name: name, players: []));
+    });
   }
 
   @override
@@ -41,5 +44,15 @@ class MockRoomRepositoryImpl implements RoomRepository {
     }
 
     return _rooms;
+  }
+
+  Future<T> delayed<T>(T Function() f) async {
+    if (shouldDelay) {
+      return Future.delayed(
+        Duration(seconds: delaySeconds),
+        () => f(),
+      );
+    }
+    return f();
   }
 }
