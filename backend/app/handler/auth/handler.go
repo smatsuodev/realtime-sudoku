@@ -40,17 +40,20 @@ func (h *Handler) SignIn(ctx context.Context, req *connect.Request[authv1.SignIn
 		return nil, err
 	}
 
-	// TODO: 属性を追加
-	cookie := http.Cookie{
-		Name:  "state_jwt",
-		Value: output.StateJWT,
-	}
-	// Cookie として返していいのか?
-	req.Header().Set("Set-Cookie", cookie.String())
-
 	res := connect.NewResponse(&authv1.SignInResponse{
 		AuthorizationUrl: output.AuthorizationURL,
 	})
+
+	// TODO: セキュリティを考慮して属性を追加
+	// Secure を付けたいが, 開発環境で cookie が送られなくて困りそう
+	// SameSite: strict だとコールバックに cookie が送られなさそう
+	cookie := http.Cookie{
+		Name:     "state_jwt",
+		Value:    output.StateJWT,
+		HttpOnly: true,
+	}
+	// Cookie として返していいのか?
+	res.Header().Set("Set-Cookie", cookie.String())
 
 	return res, nil
 }
