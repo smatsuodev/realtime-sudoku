@@ -85,7 +85,10 @@ func (s *Service) SignOut(input SignOutInput) (SignOutOutput, error) {
 }
 
 func (s *Service) OAuthCallback(input OAuthCallbackInput) (OAuthCallbackOutput, error) {
-	// TODO: state の検証
+	// 今の実装では false ならエラーが返るので, そのまま返す
+	if ok, err := s.isValidStateJWT(input.StateJWT, input.State); !ok {
+		return OAuthCallbackOutput{}, err
+	}
 
 	// TODO: アクセストークンの取得
 
@@ -96,4 +99,46 @@ func (s *Service) OAuthCallback(input OAuthCallbackInput) (OAuthCallbackOutput, 
 	// TODO: セッションの作成
 
 	panic("implement me")
+}
+
+func (s *Service) isValidStateJWT(token string, state string) (bool, error) {
+	claims, err := s.parseJWT(token)
+	if err != nil {
+		return false, err
+	}
+
+	if exp, err := claims.GetExpirationTime(); err != nil {
+		if exp == nil {
+			return false, errors.New("no expiration time")
+		}
+		if exp.Before(time.Now()) {
+			return false, errors.New("expired state")
+		}
+	}
+
+	// URL 発行時に生成した state と, callback へのリダイレクト時に受け取る state が一致するか
+	if claims.State != state {
+		return false, errors.New("invalid state")
+	}
+
+	return true, nil
+}
+
+func (s *Service) parseJWT(token string) (*StateClaims, error) {
+	t, err := jwt.ParseWithClaims(token, &StateClaims{}, func(token *jwt.Token) (interface{}, error) {
+		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
+			return nil, errors.New("unexpected signing method")
+		}
+		return []byte(s.config.JWTSecret), nil
+	})
+	if err != nil {
+		return nil, err
+	}
+
+	claims, ok := t.Claims.(*StateClaims)
+	if !ok {
+		return nil, errors.New("unexpected claims")
+	}
+
+	return claims, nil
 }
