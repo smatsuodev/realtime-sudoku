@@ -17,6 +17,7 @@ var _ IAuthService = (*Service)(nil)
 type IAuthService interface {
 	SignIn(SignInInput) (SignInOutput, error)
 	SignOut(SignOutInput) (SignOutOutput, error)
+	OAuthCallback(OAuthCallbackInput) (OAuthCallbackOutput, error)
 }
 
 type StateClaims struct {
@@ -80,5 +81,9 @@ func (s *Service) generateJWT(claims jwt.Claims) (string, error) {
 
 func (s *Service) SignOut(input SignOutInput) (SignOutOutput, error) {
 	//TODO implement me
+	panic("implement me")
+}
+
+func (s *Service) OAuthCallback(input OAuthCallbackInput) (OAuthCallbackOutput, error) {
 	panic("implement me")
 }
