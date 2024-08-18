@@ -12,11 +12,12 @@ func Register(mux *http.ServeMux) {
 	cfg := config.NewEnvConfig()
 
 	// construct services
+	// TODO: OAuthClient を差し替える
 	authService := authS.NewService(authS.ServiceConfig{
 		JWTSecret:        cfg.JWTSecret,
 		OAuthClientID:    cfg.GitHubClientID,
 		OAuthRedirectURI: cfg.OAuthRedirectURI,
-	})
+	}, new(authS.MockOAuthClient))
 
 	// construct handlers
 	authHandler := authH.NewHandler(authService)

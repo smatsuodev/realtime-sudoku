@@ -6,7 +6,6 @@ import (
 	"go.uber.org/mock/gomock"
 	authv1 "sudoku/gen/sudoku/auth/v1"
 	"sudoku/service/auth"
-	"sudoku/service/auth/mock"
 	"testing"
 )
 
@@ -30,7 +29,7 @@ func TestHandler_SignIn(t *testing.T) {
 		{
 			name: "無効なprovider",
 			fields: fields{
-				authService: mock.NewMockIAuthService(ctrl),
+				authService: auth.NewMockIAuthService(ctrl),
 			},
 			args: args{
 				ctx: context.Background(),
@@ -45,7 +44,7 @@ func TestHandler_SignIn(t *testing.T) {
 			name: "正常系",
 			fields: fields{
 				authService: func() auth.IAuthService {
-					s := mock.NewMockIAuthService(ctrl)
+					s := auth.NewMockIAuthService(ctrl)
 					s.EXPECT().SignIn(gomock.Any()).Return(auth.SignInOutput{
 						AuthorizationURL: "https://example.com?client_id=123&state=random",
 						StateJWT:         "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdGF0ZSI6InJhbmRvbSJ9.Wcs4BFdRKf3tObT4LDaU5frvBU8HOeepNs8JoP3YmY0",

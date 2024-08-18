@@ -13,13 +13,6 @@ const (
 
 var _ IAuthService = (*Service)(nil)
 
-//go:generate mockgen -source=$GOFILE -destination=mock/$GOFILE -package=mock
-type IAuthService interface {
-	SignIn(SignInInput) (SignInOutput, error)
-	SignOut(SignOutInput) (SignOutOutput, error)
-	OAuthCallback(OAuthCallbackInput) (OAuthCallbackOutput, error)
-}
-
 type StateClaims struct {
 	State string `json:"state"`
 	jwt.RegisteredClaims
@@ -32,12 +25,14 @@ type ServiceConfig struct {
 }
 
 type Service struct {
-	config ServiceConfig
+	config      ServiceConfig
+	oauthClient OAuthClient
 }
 
-func NewService(config ServiceConfig) *Service {
+func NewService(config ServiceConfig, oauthClient OAuthClient) *Service {
 	return &Service{
-		config: config,
+		config:      config,
+		oauthClient: oauthClient,
 	}
 }
 
@@ -90,7 +85,10 @@ func (s *Service) OAuthCallback(input OAuthCallbackInput) (OAuthCallbackOutput, 
 		return OAuthCallbackOutput{}, err
 	}
 
-	// TODO: アクセストークンの取得
+	_, err := s.oauthClient.GetAccessToken(input.Code, s.config.OAuthRedirectURI)
+	if err != nil {
+		return OAuthCallbackOutput{}, err
+	}
 
 	// TODO: ユーザ情報の取得
 
