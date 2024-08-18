@@ -1,13 +1,16 @@
 name: Buf CI
 on:
   push:
+    branches:
+      - main
+  pull_request:
+    types: [opened, synchronize, reopened, labeled, unlabeled]
     paths:
+      - .github/workflows/buf-ci.yaml
       - "**.proto"
       - buf.yaml
       - buf.gen.yaml
       - buf.lock
-  pull_request:
-    types: [opened, synchronize, reopened, labeled, unlabeled]
   delete:
 permissions:
   contents: read
