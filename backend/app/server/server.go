@@ -18,7 +18,7 @@ func Run(ctx context.Context) {
 	route.Register(mux)
 
 	// TODO: 引数で設定を受け取る
-	address := "localhost:3000"
+	address := ":3000"
 	log.Printf("Starting server on %s...", address)
 	srv := &http.Server{
 		Addr:    address,
@@ -32,7 +32,6 @@ func Run(ctx context.Context) {
 
 	interrupt := make(chan os.Signal, 1)
 	signal.Notify(interrupt, os.Interrupt)
-	<-interrupt
 
 	select {
 	case err := <-done:
