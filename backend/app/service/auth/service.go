@@ -85,5 +85,15 @@ func (s *Service) SignOut(input SignOutInput) (SignOutOutput, error) {
 }
 
 func (s *Service) OAuthCallback(input OAuthCallbackInput) (OAuthCallbackOutput, error) {
+	// TODO: state の検証
+
+	// TODO: アクセストークンの取得
+
+	// TODO: ユーザ情報の取得
+
+	// TODO: ユーザーの作成
+
+	// TODO: セッションの作成
+
 	panic("implement me")
 }
