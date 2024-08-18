@@ -13,6 +13,7 @@ const (
 
 var _ IAuthService = (*Service)(nil)
 
+//go:generate mockgen -source=$GOFILE -destination=mock/$GOFILE -package=mock
 type IAuthService interface {
 	SignIn(SignInInput) (SignInOutput, error)
 	SignOut(SignOutInput) (SignOutOutput, error)
