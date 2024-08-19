@@ -15,8 +15,10 @@ import 'package:widgetbook_workspace/presentation/component/create_room_dialog.d
     as _i3;
 import 'package:widgetbook_workspace/presentation/component/progress_dialog.dart'
     as _i4;
-import 'package:widgetbook_workspace/presentation/page/rooms_list_page.dart'
+import 'package:widgetbook_workspace/presentation/component/sudoku_cell.dart'
     as _i5;
+import 'package:widgetbook_workspace/presentation/page/rooms_list_page.dart'
+    as _i6;
 
 final directories = <_i1.WidgetbookNode>[
   _i1.WidgetbookFolder(
@@ -51,6 +53,13 @@ final directories = <_i1.WidgetbookNode>[
               builder: _i4.buildProgressDialog,
             ),
           ),
+          _i1.WidgetbookLeafComponent(
+            name: 'SudokuCell',
+            useCase: _i1.WidgetbookUseCase(
+              name: 'Default',
+              builder: _i5.buildSudokuCell,
+            ),
+          ),
         ],
       ),
       _i1.WidgetbookFolder(
@@ -60,7 +69,7 @@ final directories = <_i1.WidgetbookNode>[
             name: 'RoomsListPage',
             useCase: _i1.WidgetbookUseCase(
               name: 'Default',
-              builder: _i5.buildRoomsListPage,
+              builder: _i6.buildRoomsListPage,
             ),
           )
         ],
