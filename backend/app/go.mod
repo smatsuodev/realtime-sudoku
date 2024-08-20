@@ -12,4 +12,7 @@ require (
 	google.golang.org/protobuf v1.34.2
 )
 
-require golang.org/x/text v0.17.0 // indirect
+require (
+	github.com/samber/mo v1.13.0 // indirect
+	golang.org/x/text v0.17.0 // indirect
+)

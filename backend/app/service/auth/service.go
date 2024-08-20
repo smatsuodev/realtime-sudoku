@@ -4,6 +4,8 @@ import (
 	"errors"
 	"github.com/golang-jwt/jwt/v5"
 	"github.com/google/uuid"
+	"sudoku/model"
+	"sudoku/repository"
 	"time"
 )
 
@@ -28,13 +30,20 @@ type Service struct {
 	config      ServiceConfig
 	oauthClient OAuthClient
 	githubAPI   GitHubAPI
+	userRepo    repository.IUserRepository
 }
 
-func NewService(config ServiceConfig, oauthClient OAuthClient, githubAPI GitHubAPI) *Service {
+func NewService(
+	config ServiceConfig,
+	oauthClient OAuthClient,
+	githubAPI GitHubAPI,
+	userRepo repository.IUserRepository,
+) *Service {
 	return &Service{
 		config:      config,
 		oauthClient: oauthClient,
 		githubAPI:   githubAPI,
+		userRepo:    userRepo,
 	}
 }
 
@@ -92,16 +101,41 @@ func (s *Service) OAuthCallback(input OAuthCallbackInput) (OAuthCallbackOutput, 
 		return OAuthCallbackOutput{}, err
 	}
 
-	_, err = s.githubAPI.GetUserID(accessToken)
+	githubUser, err := s.githubAPI.GetUser(accessToken)
 	if err != nil {
 		return OAuthCallbackOutput{}, err
 	}
 
-	// TODO: ユーザーの作成
+	_, err = s.createUserIfNotExists(githubUser)
+	if err != nil {
+		return OAuthCallbackOutput{}, err
+	}
 
 	// TODO: セッションの作成
 
 	panic("implement me")
+}
+
+func (s *Service) createUserIfNotExists(githubUser *GitHubUser) (*model.User, error) {
+	maybeUser, err := s.userRepo.FindByGitHubUserID(githubUser.ID)
+	if err != nil {
+		return nil, err
+	}
+
+	if maybeUser.IsPresent() {
+		return maybeUser.MustGet(), nil
+	}
+
+	// ユーザーが存在しないので作成する
+	user := &model.User{
+		ID:   0, // TODO: ID はどうする?
+		Name: githubUser.Login,
+	}
+	if err := s.userRepo.Save(user); err != nil {
+		return nil, err
+	}
+
+	return user, nil
 }
 
 func (s *Service) isValidStateJWT(token string, state string) (bool, error) {

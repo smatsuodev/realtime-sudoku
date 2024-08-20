@@ -20,10 +20,10 @@ func NewGitHubAPIImpl() *GitHubAPIImpl {
 	return &GitHubAPIImpl{}
 }
 
-func (g *GitHubAPIImpl) GetUserID(accessToken string) (string, error) {
+func (g *GitHubAPIImpl) GetUser(accessToken string) (*auth.GitHubUser, error) {
 	req, err := http.NewRequest(http.MethodGet, apiBase+"/user", nil)
 	if err != nil {
-		return "", err
+		return &auth.GitHubUser{}, err
 	}
 
 	req.Header.Set("Accept", "application/vnd.github+json")
@@ -32,18 +32,22 @@ func (g *GitHubAPIImpl) GetUserID(accessToken string) (string, error) {
 
 	res, err := http.DefaultClient.Do(req)
 	if err != nil {
-		return "", err
+		return &auth.GitHubUser{}, err
 	}
 	defer res.Body.Close()
 
 	// id 以外も取りたくなるかも
 	// refs: https://docs.github.com/ja/rest/users/users?apiVersion=2022-11-28#get-the-authenticated-user
 	var jsonRes struct {
-		ID uint `json:"id"`
+		ID    uint   `json:"id"`
+		Login string `json:"login"`
 	}
 	if err := json.NewDecoder(res.Body).Decode(&jsonRes); err != nil {
-		return "", err
+		return &auth.GitHubUser{}, err
 	}
 
-	return fmt.Sprint(jsonRes.ID), nil
+	return &auth.GitHubUser{
+		ID:    jsonRes.ID,
+		Login: jsonRes.Login,
+	}, nil
 }

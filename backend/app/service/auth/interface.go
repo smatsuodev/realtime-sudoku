@@ -13,5 +13,11 @@ type OAuthClient interface {
 
 type GitHubAPI interface {
 	// access token を引数でもらうのが微妙
-	GetUserID(accessToken string) (string, error)
+	GetUser(accessToken string) (*GitHubUser, error)
+}
+
+// ここに定義していいのか?
+type GitHubUser struct {
+	ID    uint
+	Login string
 }

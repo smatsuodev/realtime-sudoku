@@ -21,6 +21,7 @@ func Register(mux *http.ServeMux) {
 		},
 		authI.NewOAuthClientImpl(cfg.GitHubClientID, cfg.GitHubClientSecret),
 		authI.NewGitHubAPIImpl(),
+		nil, // TODO: user repository に差し替える
 	)
 
 	// construct handlers
