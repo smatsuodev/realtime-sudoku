@@ -127,15 +127,17 @@ func (s *Service) createUserIfNotExists(githubUser *GitHubUser) (*model.User, er
 	}
 
 	// ユーザーが存在しないので作成する
-	user := &model.User{
-		ID:   0, // TODO: ID はどうする?
-		Name: githubUser.Login,
+	tempUser := model.NewUserByName(githubUser.Login)
+	if err := s.userRepo.Save(tempUser); err != nil {
+		return nil, err
 	}
-	if err := s.userRepo.Save(user); err != nil {
+	user, err := s.userRepo.FindByGitHubUserID(githubUser.ID)
+	if err != nil {
 		return nil, err
 	}
 
-	return user, nil
+	// 作成したので存在するはず
+	return user.MustGet(), nil
 }
 
 func (s *Service) isValidStateJWT(token string, state string) (bool, error) {
