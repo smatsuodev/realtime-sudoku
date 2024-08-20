@@ -5,6 +5,7 @@ import (
 	"sudoku/config"
 	"sudoku/gen/sudoku/auth/v1/authv1connect"
 	authH "sudoku/handler/auth"
+	authI "sudoku/infra/auth"
 	authS "sudoku/service/auth"
 )
 
@@ -12,12 +13,11 @@ func Register(mux *http.ServeMux) {
 	cfg := config.NewEnvConfig()
 
 	// construct services
-	// TODO: OAuthClient を差し替える
 	authService := authS.NewService(authS.ServiceConfig{
 		JWTSecret:        cfg.JWTSecret,
 		OAuthClientID:    cfg.GitHubClientID,
 		OAuthRedirectURI: cfg.OAuthRedirectURI,
-	}, new(authS.MockOAuthClient))
+	}, authI.NewOAuthClientImpl(cfg.GitHubClientID, cfg.GitHubClientSecret))
 
 	// construct handlers
 	authHandler := authH.NewHandler(authService)
