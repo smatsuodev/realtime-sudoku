@@ -27,12 +27,14 @@ type ServiceConfig struct {
 type Service struct {
 	config      ServiceConfig
 	oauthClient OAuthClient
+	githubAPI   GitHubAPI
 }
 
-func NewService(config ServiceConfig, oauthClient OAuthClient) *Service {
+func NewService(config ServiceConfig, oauthClient OAuthClient, githubAPI GitHubAPI) *Service {
 	return &Service{
 		config:      config,
 		oauthClient: oauthClient,
+		githubAPI:   githubAPI,
 	}
 }
 
@@ -85,12 +87,15 @@ func (s *Service) OAuthCallback(input OAuthCallbackInput) (OAuthCallbackOutput, 
 		return OAuthCallbackOutput{}, err
 	}
 
-	_, err := s.oauthClient.GetAccessToken(input.Code, s.config.OAuthRedirectURI)
+	accessToken, err := s.oauthClient.GetAccessToken(input.Code, s.config.OAuthRedirectURI)
 	if err != nil {
 		return OAuthCallbackOutput{}, err
 	}
 
-	// TODO: ユーザ情報の取得
+	_, err = s.githubAPI.GetUserID(accessToken)
+	if err != nil {
+		return OAuthCallbackOutput{}, err
+	}
 
 	// TODO: ユーザーの作成
 

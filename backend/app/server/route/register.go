@@ -13,11 +13,15 @@ func Register(mux *http.ServeMux) {
 	cfg := config.NewEnvConfig()
 
 	// construct services
-	authService := authS.NewService(authS.ServiceConfig{
-		JWTSecret:        cfg.JWTSecret,
-		OAuthClientID:    cfg.GitHubClientID,
-		OAuthRedirectURI: cfg.OAuthRedirectURI,
-	}, authI.NewOAuthClientImpl(cfg.GitHubClientID, cfg.GitHubClientSecret))
+	authService := authS.NewService(
+		authS.ServiceConfig{
+			JWTSecret:        cfg.JWTSecret,
+			OAuthClientID:    cfg.GitHubClientID,
+			OAuthRedirectURI: cfg.OAuthRedirectURI,
+		},
+		authI.NewOAuthClientImpl(cfg.GitHubClientID, cfg.GitHubClientSecret),
+		authI.NewGitHubAPIImpl(),
+	)
 
 	// construct handlers
 	authHandler := authH.NewHandler(authService)

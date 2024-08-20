@@ -10,3 +10,8 @@ type IAuthService interface {
 type OAuthClient interface {
 	GetAccessToken(code string, redirectURI string) (string, error)
 }
+
+type GitHubAPI interface {
+	// access token を引数でもらうのが微妙
+	GetUserID(accessToken string) (string, error)
+}
