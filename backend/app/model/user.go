@@ -3,12 +3,17 @@ package model
 import "github.com/samber/mo"
 
 type User struct {
-	id   mo.Option[uint]
-	name string
+	id       mo.Option[uint]
+	githubID uint
+	name     string
 }
 
-func (u *User) SetName(name string) {
-	u.name = name
+func (u *User) IsIDPresent() bool {
+	return u.id.IsPresent()
+}
+
+func (u *User) GithubID() uint {
+	return u.githubID
 }
 
 func (u *User) ID() uint {
@@ -25,13 +30,21 @@ func (u *User) Name() string {
 	return u.name
 }
 
-func NewUserByName(name string) *User {
-	return &User{name: name}
+func (u *User) SetName(name string) {
+	u.name = name
 }
 
-func NewUser(id uint, name string) *User {
+func NewUserWithoutID(githubID uint, name string) *User {
 	return &User{
-		id:   mo.Some(id),
-		name: name,
+		githubID: githubID,
+		name:     name,
+	}
+}
+
+func NewUser(id uint, githubID uint, name string) *User {
+	return &User{
+		id:       mo.Some(id),
+		githubID: githubID,
+		name:     name,
 	}
 }

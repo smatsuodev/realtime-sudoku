@@ -127,7 +127,7 @@ func (s *Service) createUserIfNotExists(githubUser *GitHubUser) (*model.User, er
 	}
 
 	// ユーザーが存在しないので作成する
-	tempUser := model.NewUserByName(githubUser.Login)
+	tempUser := model.NewUserWithoutID(githubUser.ID, githubUser.Login)
 	if err := s.userRepo.Save(tempUser); err != nil {
 		return nil, err
 	}
