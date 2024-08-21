@@ -12,6 +12,10 @@ type Session struct {
 	expiresAt time.Time
 }
 
+func (s *Session) IsIDPresent() bool {
+	return s.id.IsPresent()
+}
+
 func (s *Session) ID() uuid.UUID {
 	if s.id.IsAbsent() {
 		// Session 作成時のみ None になる

@@ -31,7 +31,7 @@ func Register(mux *http.ServeMux) {
 		authI.NewOAuthClientImpl(cfg.GitHubClientID, cfg.GitHubClientSecret),
 		authI.NewGitHubAPIImpl(),
 		gormRepo.NewUserRepository(db),
-		nil, // TODO: 注入
+		gormRepo.NewSessionRepository(db),
 	)
 
 	// construct handlers
