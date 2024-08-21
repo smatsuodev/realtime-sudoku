@@ -20,6 +20,10 @@ func (s *Session) ID() uuid.UUID {
 	return s.id.MustGet()
 }
 
+func (s *Session) SetID(id uuid.UUID) {
+	s.id = mo.Some(id)
+}
+
 func (s *Session) UserID() uint {
 	return s.userID
 }

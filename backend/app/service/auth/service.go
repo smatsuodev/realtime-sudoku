@@ -31,6 +31,7 @@ type Service struct {
 	oauthClient OAuthClient
 	githubAPI   GitHubAPI
 	userRepo    repository.IUserRepository
+	sessionRepo repository.ISessionRepository
 }
 
 func NewService(
@@ -38,12 +39,14 @@ func NewService(
 	oauthClient OAuthClient,
 	githubAPI GitHubAPI,
 	userRepo repository.IUserRepository,
+	sessionRepo repository.ISessionRepository,
 ) *Service {
 	return &Service{
 		config:      config,
 		oauthClient: oauthClient,
 		githubAPI:   githubAPI,
 		userRepo:    userRepo,
+		sessionRepo: sessionRepo,
 	}
 }
 
@@ -106,14 +109,19 @@ func (s *Service) OAuthCallback(input OAuthCallbackInput) (OAuthCallbackOutput, 
 		return OAuthCallbackOutput{}, err
 	}
 
-	_, err = s.createUserIfNotExists(githubUser)
+	user, err := s.createUserIfNotExists(githubUser)
 	if err != nil {
 		return OAuthCallbackOutput{}, err
 	}
 
-	// TODO: セッションの作成
+	session := model.NewSessionWithoutID(user.ID(), time.Now().Add(24*time.Hour))
+	if err := s.sessionRepo.Save(session); err != nil {
+		return OAuthCallbackOutput{}, err
+	}
 
-	panic("implement me")
+	return OAuthCallbackOutput{
+		SessionID: session.ID().String(),
+	}, nil
 }
 
 func (s *Service) createUserIfNotExists(githubUser *GitHubUser) (*model.User, error) {
@@ -127,17 +135,12 @@ func (s *Service) createUserIfNotExists(githubUser *GitHubUser) (*model.User, er
 	}
 
 	// ユーザーが存在しないので作成する
-	tempUser := model.NewUserWithoutID(githubUser.ID, githubUser.Login)
-	if err := s.userRepo.Save(tempUser); err != nil {
-		return nil, err
-	}
-	user, err := s.userRepo.FindByGitHubUserID(githubUser.ID)
-	if err != nil {
+	user := model.NewUserWithoutID(githubUser.ID, githubUser.Login)
+	if err := s.userRepo.Save(user); err != nil {
 		return nil, err
 	}
 
-	// 作成したので存在するはず
-	return user.MustGet(), nil
+	return user, nil
 }
 
 func (s *Service) isValidStateJWT(token string, state string) (bool, error) {

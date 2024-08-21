@@ -33,10 +33,15 @@ func (r *UserRepository) FindByGitHubUserID(githubUserID uint) (mo.Option[*model
 func (r *UserRepository) Save(user *model.User) error {
 	if !user.IsIDPresent() {
 		// 新規作成
-		return r.db.Create(&User{
+		userModel := &User{
 			Name:         user.Name(),
 			GitHubUserID: user.GithubID(),
-		}).Error
+		}
+		if err := r.db.Create(userModel).Error; err != nil {
+			return err
+		}
+		user.SetID(userModel.ID)
+		return nil
 	}
 
 	// 既存ユーザーの更新

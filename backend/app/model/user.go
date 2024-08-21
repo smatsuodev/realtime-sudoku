@@ -27,6 +27,10 @@ func (u *User) ID() uint {
 	return u.id.MustGet()
 }
 
+func (u *User) SetID(id uint) {
+	u.id = mo.Some(id)
+}
+
 func (u *User) Name() string {
 	return u.name
 }

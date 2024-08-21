@@ -8,5 +8,6 @@ import (
 
 type IUserRepository interface {
 	FindByGitHubUserID(githubUserID uint) (mo.Option[*model.User], error)
+	// Save 新規レコード作成の場合, 採番された ID をセットする
 	Save(user *model.User) error
 }
