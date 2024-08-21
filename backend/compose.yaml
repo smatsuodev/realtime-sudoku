@@ -10,7 +10,9 @@ services:
     ports:
       - "127.0.0.1:3000:3000"
     volumes:
-      - ./app:/app
+      - ./app:/app:ro
+    env_file:
+      - .env
     command: ["-build.cmd", "go build -o ./tmp/main ./cmd"]
 
   db:
