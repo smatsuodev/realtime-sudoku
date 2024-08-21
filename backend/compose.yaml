@@ -10,7 +10,7 @@ services:
     ports:
       - "127.0.0.1:3000:3000"
     volumes:
-      - ./app:/app:ro
+      - ./app:/app
     env_file:
       - .env
     command: ["-build.cmd", "go build -o ./tmp/main ./cmd"]
@@ -33,6 +33,13 @@ services:
       interval: 5s
       timeout: 60s
       retries: 5
+
+  adminer:
+    container_name: adminer
+    image: adminer
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:8080:8080"
 
 volumes:
   pgdata:
