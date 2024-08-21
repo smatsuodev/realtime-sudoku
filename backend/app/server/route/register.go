@@ -36,7 +36,9 @@ func Register(mux *http.ServeMux) {
 
 	// construct handlers
 	authHandler := authH.NewHandler(authService)
+	authCallbackHandler := authH.NewCallbackHandler(authService)
 
 	// register handlers
 	mux.Handle(authv1connect.NewAuthServiceHandler(authHandler))
+	mux.HandleFunc("/auth/callback", authCallbackHandler.Handle)
 }
