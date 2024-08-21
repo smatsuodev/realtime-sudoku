@@ -3,6 +3,7 @@ package model
 import "github.com/samber/mo"
 
 type User struct {
+	// id のゼロ値 (= 0) で有無を判定しても良さそう
 	id       mo.Option[uint]
 	githubID uint
 	name     string
