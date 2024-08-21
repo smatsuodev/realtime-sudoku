@@ -22,5 +22,8 @@ func NewGormConnection() (*gorm.DB, error) {
 }
 
 func migrate(db *gorm.DB) error {
-	return db.AutoMigrate(&User{})
+	return db.AutoMigrate(
+		&User{},
+		&Session{},
+	)
 }
