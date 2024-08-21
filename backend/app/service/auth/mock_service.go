@@ -120,3 +120,41 @@ func (mr *MockOAuthClientMockRecorder) GetAccessToken(code, redirectURI any) *go
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetAccessToken", reflect.TypeOf((*MockOAuthClient)(nil).GetAccessToken), code, redirectURI)
 }
+
+// MockGitHubAPI is a mock of GitHubAPI interface.
+type MockGitHubAPI struct {
+	ctrl     *gomock.Controller
+	recorder *MockGitHubAPIMockRecorder
+}
+
+// MockGitHubAPIMockRecorder is the mock recorder for MockGitHubAPI.
+type MockGitHubAPIMockRecorder struct {
+	mock *MockGitHubAPI
+}
+
+// NewMockGitHubAPI creates a new mock instance.
+func NewMockGitHubAPI(ctrl *gomock.Controller) *MockGitHubAPI {
+	mock := &MockGitHubAPI{ctrl: ctrl}
+	mock.recorder = &MockGitHubAPIMockRecorder{mock}
+	return mock
+}
+
+// EXPECT returns an object that allows the caller to indicate expected use.
+func (m *MockGitHubAPI) EXPECT() *MockGitHubAPIMockRecorder {
+	return m.recorder
+}
+
+// GetUser mocks base method.
+func (m *MockGitHubAPI) GetUser(accessToken string) (*GitHubUser, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "GetUser", accessToken)
+	ret0, _ := ret[0].(*GitHubUser)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// GetUser indicates an expected call of GetUser.
+func (mr *MockGitHubAPIMockRecorder) GetUser(accessToken any) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetUser", reflect.TypeOf((*MockGitHubAPI)(nil).GetUser), accessToken)
+}
