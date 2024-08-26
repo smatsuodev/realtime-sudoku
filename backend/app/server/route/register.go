@@ -2,7 +2,7 @@ package route
 
 import (
 	"connectrpc.com/connect"
-	"log"
+	"gorm.io/gorm"
 	"net/http"
 	"sudoku/config"
 	"sudoku/gen/sudoku/auth/v1/authv1connect"
@@ -13,16 +13,7 @@ import (
 	authS "sudoku/service/auth"
 )
 
-func Register(mux *http.ServeMux) {
-	cfg := config.NewEnvConfig()
-
-	// infrastructure
-	// ここで初期化するべきか?
-	db, err := gormRepo.NewGormConnection()
-	if err != nil {
-		log.Fatalln(err)
-	}
-
+func Register(mux *http.ServeMux, cfg config.EnvConfig, db *gorm.DB) {
 	// construct services
 	authService := authS.NewService(
 		authS.ServiceConfig{
