@@ -4,6 +4,8 @@ import (
 	"errors"
 	"github.com/golang-jwt/jwt/v5"
 	"github.com/google/uuid"
+	"sudoku/model"
+	"sudoku/repository"
 	"time"
 )
 
@@ -12,12 +14,6 @@ const (
 )
 
 var _ IAuthService = (*Service)(nil)
-
-//go:generate mockgen -source=$GOFILE -destination=mock/$GOFILE -package=mock
-type IAuthService interface {
-	SignIn(SignInInput) (SignInOutput, error)
-	SignOut(SignOutInput) (SignOutOutput, error)
-}
 
 type StateClaims struct {
 	State string `json:"state"`
@@ -31,12 +27,26 @@ type ServiceConfig struct {
 }
 
 type Service struct {
-	config ServiceConfig
+	config      ServiceConfig
+	oauthClient OAuthClient
+	githubAPI   GitHubAPI
+	userRepo    repository.IUserRepository
+	sessionRepo repository.ISessionRepository
 }
 
-func NewService(config ServiceConfig) *Service {
+func NewService(
+	config ServiceConfig,
+	oauthClient OAuthClient,
+	githubAPI GitHubAPI,
+	userRepo repository.IUserRepository,
+	sessionRepo repository.ISessionRepository,
+) *Service {
 	return &Service{
-		config: config,
+		config:      config,
+		oauthClient: oauthClient,
+		githubAPI:   githubAPI,
+		userRepo:    userRepo,
+		sessionRepo: sessionRepo,
 	}
 }
 
@@ -81,4 +91,96 @@ func (s *Service) generateJWT(claims jwt.Claims) (string, error) {
 func (s *Service) SignOut(input SignOutInput) (SignOutOutput, error) {
 	//TODO implement me
 	panic("implement me")
+}
+
+func (s *Service) OAuthCallback(input OAuthCallbackInput) (OAuthCallbackOutput, error) {
+	// 今の実装では false ならエラーが返るので, そのまま返す
+	if ok, err := s.isValidStateJWT(input.StateJWT, input.State); !ok {
+		return OAuthCallbackOutput{}, err
+	}
+
+	accessToken, err := s.oauthClient.GetAccessToken(input.Code, s.config.OAuthRedirectURI)
+	if err != nil {
+		return OAuthCallbackOutput{}, err
+	}
+
+	githubUser, err := s.githubAPI.GetUser(accessToken)
+	if err != nil {
+		return OAuthCallbackOutput{}, err
+	}
+
+	user, err := s.createUserIfNotExists(githubUser)
+	if err != nil {
+		return OAuthCallbackOutput{}, err
+	}
+
+	session := model.NewSessionWithoutID(user.ID(), time.Now().Add(24*time.Hour))
+	if err := s.sessionRepo.Save(session); err != nil {
+		return OAuthCallbackOutput{}, err
+	}
+
+	return OAuthCallbackOutput{
+		SessionID: session.ID().String(),
+	}, nil
+}
+
+func (s *Service) createUserIfNotExists(githubUser *GitHubUser) (*model.User, error) {
+	maybeUser, err := s.userRepo.FindByGitHubUserID(githubUser.ID)
+	if err != nil {
+		return nil, err
+	}
+
+	if maybeUser.IsPresent() {
+		return maybeUser.MustGet(), nil
+	}
+
+	// ユーザーが存在しないので作成する
+	user := model.NewUserWithoutID(githubUser.ID, githubUser.Login)
+	if err := s.userRepo.Save(user); err != nil {
+		return nil, err
+	}
+
+	return user, nil
+}
+
+func (s *Service) isValidStateJWT(token string, state string) (bool, error) {
+	claims, err := s.parseJWT(token)
+	if err != nil {
+		return false, err
+	}
+
+	if exp, err := claims.GetExpirationTime(); err != nil {
+		if exp == nil {
+			return false, errors.New("no expiration time")
+		}
+		if exp.Before(time.Now()) {
+			return false, errors.New("expired state")
+		}
+	}
+
+	// URL 発行時に生成した state と, callback へのリダイレクト時に受け取る state が一致するか
+	if claims.State != state {
+		return false, errors.New("invalid state")
+	}
+
+	return true, nil
+}
+
+func (s *Service) parseJWT(token string) (*StateClaims, error) {
+	t, err := jwt.ParseWithClaims(token, &StateClaims{}, func(token *jwt.Token) (interface{}, error) {
+		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
+			return nil, errors.New("unexpected signing method")
+		}
+		return []byte(s.config.JWTSecret), nil
+	})
+	if err != nil {
+		return nil, err
+	}
+
+	claims, ok := t.Claims.(*StateClaims)
+	if !ok {
+		return nil, errors.New("unexpected claims")
+	}
+
+	return claims, nil
 }

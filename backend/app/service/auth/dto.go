@@ -20,3 +20,13 @@ type SignOutInput struct {
 }
 
 type SignOutOutput struct{}
+
+type OAuthCallbackInput struct {
+	Code     string
+	State    string
+	StateJWT string
+}
+
+type OAuthCallbackOutput struct {
+	SessionID string
+}

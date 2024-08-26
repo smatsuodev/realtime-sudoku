@@ -9,6 +9,7 @@ import (
 	"net/http"
 	"os"
 	"os/signal"
+	"sudoku/handler/middleware"
 	"sudoku/server/route"
 	"time"
 )
@@ -21,8 +22,11 @@ func Run(ctx context.Context) {
 	address := ":3000"
 	log.Printf("Starting server on %s...", address)
 	srv := &http.Server{
-		Addr:    address,
-		Handler: h2c.NewHandler(mux, &http2.Server{}),
+		Addr: address,
+		Handler: h2c.NewHandler(
+			middleware.LoggingMiddleware(mux),
+			&http2.Server{},
+		),
 	}
 
 	done := make(chan error, 1)
