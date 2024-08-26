@@ -184,3 +184,21 @@ func (s *Service) parseJWT(token string) (*StateClaims, error) {
 
 	return claims, nil
 }
+
+func (s *Service) ValidateSession(input ValidateSessionInput) (ValidateSessionOutput, error) {
+	maybeSession, err := s.sessionRepo.FindByID(input.SessionID)
+	if err != nil {
+		return ValidateSessionOutput{}, err
+	}
+
+	if maybeSession.IsAbsent() {
+		return ValidateSessionOutput{IsValid: false}, nil
+	}
+	session := maybeSession.MustGet()
+
+	if session.IsExpired() {
+		return ValidateSessionOutput{IsValid: false}, nil
+	}
+
+	return ValidateSessionOutput{IsValid: true}, nil
+}

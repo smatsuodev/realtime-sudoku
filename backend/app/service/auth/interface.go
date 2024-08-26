@@ -5,6 +5,7 @@ type IAuthService interface {
 	SignIn(SignInInput) (SignInOutput, error)
 	SignOut(SignOutInput) (SignOutOutput, error)
 	OAuthCallback(OAuthCallbackInput) (OAuthCallbackOutput, error)
+	ValidateSession(ValidateSessionInput) (ValidateSessionOutput, error)
 }
 
 type OAuthClient interface {
