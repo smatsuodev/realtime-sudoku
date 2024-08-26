@@ -1,0 +1,9 @@
+syntax = "proto3";
+
+package sudoku.common.v1;
+
+import "google/protobuf/descriptor.proto";
+
+extend google.protobuf.MethodOptions {
+  bool require_auth = 50000;
+}

@@ -5,26 +5,37 @@ import (
 	"errors"
 	"golang.org/x/net/http2"
 	"golang.org/x/net/http2/h2c"
+	"gorm.io/gorm"
 	"log"
 	"net/http"
 	"os"
 	"os/signal"
+	"sudoku/config"
+	"sudoku/handler/middleware"
 	"sudoku/server/route"
 	"time"
 )
 
-func Run(ctx context.Context) {
+// cfg, db は引数でもらうべきなのか?
+func Run(ctx context.Context, cfg config.EnvConfig, db *gorm.DB) {
 	mux := http.NewServeMux()
-	route.Register(mux)
+	route.Register(mux, cfg, db)
 
 	// TODO: 引数で設定を受け取る
-	address := "localhost:3000"
+	address := ":3000"
 	log.Printf("Starting server on %s...", address)
 	srv := &http.Server{
-		Addr:    address,
-		Handler: h2c.NewHandler(mux, &http2.Server{}),
+		Addr: address,
+		Handler: h2c.NewHandler(
+			middleware.LoggingMiddleware(mux),
+			&http2.Server{},
+		),
 	}
 
+	runServer(ctx, srv)
+}
+
+func runServer(ctx context.Context, srv *http.Server) {
 	done := make(chan error, 1)
 	go func() {
 		done <- srv.ListenAndServe()
@@ -32,7 +43,6 @@ func Run(ctx context.Context) {
 
 	interrupt := make(chan os.Signal, 1)
 	signal.Notify(interrupt, os.Interrupt)
-	<-interrupt
 
 	select {
 	case err := <-done:

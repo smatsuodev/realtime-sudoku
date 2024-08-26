@@ -70,10 +70,14 @@ class SignInRequest extends $pb.GeneratedMessage {
 class SignInResponse extends $pb.GeneratedMessage {
   factory SignInResponse({
     $core.String? authorizationUrl,
+    SignInStatus? status,
   }) {
     final $result = create();
     if (authorizationUrl != null) {
       $result.authorizationUrl = authorizationUrl;
+    }
+    if (status != null) {
+      $result.status = status;
     }
     return $result;
   }
@@ -83,6 +87,7 @@ class SignInResponse extends $pb.GeneratedMessage {
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'SignInResponse', package: const $pb.PackageName(_omitMessageNames ? '' : 'sudoku.auth.v1'), createEmptyInstance: create)
     ..aOS(1, _omitFieldNames ? '' : 'authorizationUrl')
+    ..e<SignInStatus>(2, _omitFieldNames ? '' : 'status', $pb.PbFieldType.OE, defaultOrMaker: SignInStatus.SIGN_IN_STATUS_UNSPECIFIED, valueOf: SignInStatus.valueOf, enumValues: SignInStatus.values)
     ..hasRequiredFields = false
   ;
 
@@ -116,6 +121,15 @@ class SignInResponse extends $pb.GeneratedMessage {
   $core.bool hasAuthorizationUrl() => $_has(0);
   @$pb.TagNumber(1)
   void clearAuthorizationUrl() => clearField(1);
+
+  @$pb.TagNumber(2)
+  SignInStatus get status => $_getN(1);
+  @$pb.TagNumber(2)
+  set status(SignInStatus v) { setField(2, v); }
+  @$pb.TagNumber(2)
+  $core.bool hasStatus() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearStatus() => clearField(2);
 }
 
 class SignOutRequest extends $pb.GeneratedMessage {
