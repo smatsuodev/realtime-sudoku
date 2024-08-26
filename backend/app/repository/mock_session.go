@@ -41,6 +41,20 @@ func (m *MockISessionRepository) EXPECT() *MockISessionRepositoryMockRecorder {
 	return m.recorder
 }
 
+// DeleteByID mocks base method.
+func (m *MockISessionRepository) DeleteByID(id uuid.UUID) error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "DeleteByID", id)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// DeleteByID indicates an expected call of DeleteByID.
+func (mr *MockISessionRepositoryMockRecorder) DeleteByID(id any) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "DeleteByID", reflect.TypeOf((*MockISessionRepository)(nil).DeleteByID), id)
+}
+
 // DeleteExpired mocks base method.
 func (m *MockISessionRepository) DeleteExpired() error {
 	m.ctrl.T.Helper()
