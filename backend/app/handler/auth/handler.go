@@ -98,6 +98,31 @@ func (h *Handler) SignIn(ctx context.Context, req *connect.Request[authv1.SignIn
 }
 
 func (h *Handler) SignOut(ctx context.Context, req *connect.Request[authv1.SignOutRequest]) (*connect.Response[authv1.SignOutResponse], error) {
-	//TODO implement me
-	panic("implement me")
+	// いずれの場合もセッションクッキーは削除させる
+	res := connect.NewResponse(&authv1.SignOutResponse{})
+	c := http.Cookie{
+		Name:   SessionCookieName,
+		MaxAge: -1,
+	}
+	res.Header().Set("Set-Cookie", c.String())
+
+	sessionCookie := req.Header().Get(SessionCookieName)
+	if sessionCookie == "" {
+		// 未サインイン
+		return res, nil
+	}
+	sessionID, err := uuid.Parse(sessionCookie)
+	if err != nil {
+		// 未サインイン
+		return connect.NewResponse(&authv1.SignOutResponse{}), nil
+	}
+
+	_, err = h.authService.SignOut(authS.SignOutInput{
+		SessionID: sessionID,
+	})
+	if err != nil {
+		return nil, connect.NewError(connect.CodeInternal, err)
+	}
+
+	return res, nil
 }

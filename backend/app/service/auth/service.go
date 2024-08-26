@@ -89,8 +89,11 @@ func (s *Service) generateJWT(claims jwt.Claims) (string, error) {
 }
 
 func (s *Service) SignOut(input SignOutInput) (SignOutOutput, error) {
-	//TODO implement me
-	panic("implement me")
+	if err := s.sessionRepo.DeleteByID(input.SessionID); err != nil {
+		return SignOutOutput{}, err
+	}
+
+	return SignOutOutput{}, nil
 }
 
 func (s *Service) OAuthCallback(input OAuthCallbackInput) (OAuthCallbackOutput, error) {
@@ -120,7 +123,7 @@ func (s *Service) OAuthCallback(input OAuthCallbackInput) (OAuthCallbackOutput, 
 	}
 
 	return OAuthCallbackOutput{
-		SessionID: session.ID().String(),
+		SessionID: session.ID(),
 	}, nil
 }
 
