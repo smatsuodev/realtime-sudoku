@@ -30,5 +30,22 @@ class OAuthProvider extends $pb.ProtobufEnum {
   const OAuthProvider._($core.int v, $core.String n) : super(v, n);
 }
 
+class SignInStatus extends $pb.ProtobufEnum {
+  static const SignInStatus SIGN_IN_STATUS_UNSPECIFIED = SignInStatus._(0, _omitEnumNames ? '' : 'SIGN_IN_STATUS_UNSPECIFIED');
+  static const SignInStatus SIGN_IN_STATUS_ALREADY_SIGNED_IN = SignInStatus._(1, _omitEnumNames ? '' : 'SIGN_IN_STATUS_ALREADY_SIGNED_IN');
+  static const SignInStatus SIGN_IN_STATUS_REQUIRES_SIGNING_IN = SignInStatus._(2, _omitEnumNames ? '' : 'SIGN_IN_STATUS_REQUIRES_SIGNING_IN');
+
+  static const $core.List<SignInStatus> values = <SignInStatus> [
+    SIGN_IN_STATUS_UNSPECIFIED,
+    SIGN_IN_STATUS_ALREADY_SIGNED_IN,
+    SIGN_IN_STATUS_REQUIRES_SIGNING_IN,
+  ];
+
+  static final $core.Map<$core.int, SignInStatus> _byValue = $pb.ProtobufEnum.initByValue(values);
+  static SignInStatus? valueOf($core.int value) => _byValue[value];
+
+  const SignInStatus._($core.int v, $core.String n) : super(v, n);
+}
+
 
 const _omitEnumNames = $core.bool.fromEnvironment('protobuf.omit_enum_names');
