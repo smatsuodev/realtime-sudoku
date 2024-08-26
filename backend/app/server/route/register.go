@@ -40,5 +40,5 @@ func Register(mux *http.ServeMux) {
 
 	// register handlers
 	mux.Handle(authv1connect.NewAuthServiceHandler(authHandler))
-	mux.HandleFunc("/auth/callback", authCallbackHandler.Handle)
+	mux.HandleFunc("/auth/github/callback", authCallbackHandler.Handle)
 }
