@@ -25,7 +25,7 @@ func (h *CallbackHandler) Handle(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	stateCookie, err := r.Cookie("state")
+	stateCookie, err := r.Cookie("state_jwt")
 	if err != nil {
 		http.Error(w, "state cookie is required", http.StatusBadRequest)
 		return
