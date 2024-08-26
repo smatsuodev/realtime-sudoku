@@ -86,6 +86,7 @@ func (h *Handler) SignIn(ctx context.Context, req *connect.Request[authv1.SignIn
 	cookies = append(cookies, &http.Cookie{
 		Name:     "state_jwt",
 		Value:    output.StateJWT,
+		Path:     "/",
 		HttpOnly: true,
 	})
 

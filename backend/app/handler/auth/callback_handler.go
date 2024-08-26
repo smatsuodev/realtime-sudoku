@@ -44,6 +44,7 @@ func (h *CallbackHandler) Handle(w http.ResponseWriter, r *http.Request) {
 	http.SetCookie(w, &http.Cookie{
 		Name:     SessionCookieName,
 		Value:    output.SessionID,
+		Path:     "/",
 		Secure:   false, // NOTE: true が望ましいが, 開発環境で支障が出そう
 		HttpOnly: true,
 		SameSite: http.SameSiteStrictMode,

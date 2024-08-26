@@ -1,11 +1,13 @@
 package route
 
 import (
+	"connectrpc.com/connect"
 	"log"
 	"net/http"
 	"sudoku/config"
 	"sudoku/gen/sudoku/auth/v1/authv1connect"
 	authH "sudoku/handler/auth"
+	"sudoku/handler/interceptor"
 	authI "sudoku/infra/auth"
 	gormRepo "sudoku/infra/gorm"
 	authS "sudoku/service/auth"
@@ -39,6 +41,8 @@ func Register(mux *http.ServeMux) {
 	authCallbackHandler := authH.NewCallbackHandler(authService)
 
 	// register handlers
-	mux.Handle(authv1connect.NewAuthServiceHandler(authHandler))
+	interceptors := connect.WithInterceptors(interceptor.NewAuthInterceptor(authService))
+
+	mux.Handle(authv1connect.NewAuthServiceHandler(authHandler, interceptors))
 	mux.HandleFunc("/auth/github/callback", authCallbackHandler.Handle)
 }
