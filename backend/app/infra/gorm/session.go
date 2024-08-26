@@ -54,3 +54,7 @@ func (r *SessionRepository) Save(session *model.Session) error {
 func (r *SessionRepository) DeleteExpired() error {
 	return r.db.Where("expires_at < ?", time.Now()).Delete(&Session{}).Error
 }
+
+func (r *SessionRepository) DeleteByID(id uuid.UUID) error {
+	return r.db.Delete(&Session{}, id).Error
+}
