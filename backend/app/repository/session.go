@@ -11,4 +11,5 @@ type ISessionRepository interface {
 	FindByID(id uuid.UUID) (mo.Option[*model.Session], error)
 	// Save 新規レコード作成の場合, 採番された ID をセットする
 	Save(session *model.Session) error
+	DeleteExpired() error
 }

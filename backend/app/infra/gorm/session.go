@@ -7,6 +7,7 @@ import (
 	"gorm.io/gorm"
 	"sudoku/model"
 	"sudoku/repository"
+	"time"
 )
 
 var _ repository.ISessionRepository = (*SessionRepository)(nil)
@@ -48,4 +49,8 @@ func (r *SessionRepository) Save(session *model.Session) error {
 	session.SetID(sessionModel.ID)
 
 	return nil
+}
+
+func (r *SessionRepository) DeleteExpired() error {
+	return r.db.Where("expires_at < ?", time.Now()).Delete(&Session{}).Error
 }
