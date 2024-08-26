@@ -83,6 +83,21 @@ func (mr *MockIAuthServiceMockRecorder) SignOut(arg0 any) *gomock.Call {
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "SignOut", reflect.TypeOf((*MockIAuthService)(nil).SignOut), arg0)
 }
 
+// ValidateSession mocks base method.
+func (m *MockIAuthService) ValidateSession(arg0 ValidateSessionInput) (ValidateSessionOutput, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "ValidateSession", arg0)
+	ret0, _ := ret[0].(ValidateSessionOutput)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// ValidateSession indicates an expected call of ValidateSession.
+func (mr *MockIAuthServiceMockRecorder) ValidateSession(arg0 any) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ValidateSession", reflect.TypeOf((*MockIAuthService)(nil).ValidateSession), arg0)
+}
+
 // MockOAuthClient is a mock of OAuthClient interface.
 type MockOAuthClient struct {
 	ctrl     *gomock.Controller

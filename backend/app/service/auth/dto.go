@@ -1,5 +1,7 @@
 package auth
 
+import "github.com/google/uuid"
+
 type OAuthProvider string
 
 const (
@@ -29,4 +31,12 @@ type OAuthCallbackInput struct {
 
 type OAuthCallbackOutput struct {
 	SessionID string
+}
+
+type ValidateSessionInput struct {
+	SessionID uuid.UUID
+}
+
+type ValidateSessionOutput struct {
+	IsValid bool
 }

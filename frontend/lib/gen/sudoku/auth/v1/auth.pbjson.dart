@@ -27,6 +27,22 @@ final $typed_data.Uint8List oAuthProviderDescriptor = $convert.base64Decode(
     'Cg1PQXV0aFByb3ZpZGVyEh4KGk9BVVRIX1BST1ZJREVSX1VOU1BFQ0lGSUVEEAASGQoVT0FVVE'
     'hfUFJPVklERVJfR0lUSFVCEAE=');
 
+@$core.Deprecated('Use signInStatusDescriptor instead')
+const SignInStatus$json = {
+  '1': 'SignInStatus',
+  '2': [
+    {'1': 'SIGN_IN_STATUS_UNSPECIFIED', '2': 0},
+    {'1': 'SIGN_IN_STATUS_ALREADY_SIGNED_IN', '2': 1},
+    {'1': 'SIGN_IN_STATUS_REQUIRES_SIGNING_IN', '2': 2},
+  ],
+};
+
+/// Descriptor for `SignInStatus`. Decode as a `google.protobuf.EnumDescriptorProto`.
+final $typed_data.Uint8List signInStatusDescriptor = $convert.base64Decode(
+    'CgxTaWduSW5TdGF0dXMSHgoaU0lHTl9JTl9TVEFUVVNfVU5TUEVDSUZJRUQQABIkCiBTSUdOX0'
+    'lOX1NUQVRVU19BTFJFQURZX1NJR05FRF9JThABEiYKIlNJR05fSU5fU1RBVFVTX1JFUVVJUkVT'
+    'X1NJR05JTkdfSU4QAg==');
+
 @$core.Deprecated('Use signInRequestDescriptor instead')
 const SignInRequest$json = {
   '1': 'SignInRequest',
@@ -45,13 +61,15 @@ const SignInResponse$json = {
   '1': 'SignInResponse',
   '2': [
     {'1': 'authorization_url', '3': 1, '4': 1, '5': 9, '10': 'authorizationUrl'},
+    {'1': 'status', '3': 2, '4': 1, '5': 14, '6': '.sudoku.auth.v1.SignInStatus', '10': 'status'},
   ],
 };
 
 /// Descriptor for `SignInResponse`. Decode as a `google.protobuf.DescriptorProto`.
 final $typed_data.Uint8List signInResponseDescriptor = $convert.base64Decode(
     'Cg5TaWduSW5SZXNwb25zZRIrChFhdXRob3JpemF0aW9uX3VybBgBIAEoCVIQYXV0aG9yaXphdG'
-    'lvblVybA==');
+    'lvblVybBI0CgZzdGF0dXMYAiABKA4yHC5zdWRva3UuYXV0aC52MS5TaWduSW5TdGF0dXNSBnN0'
+    'YXR1cw==');
 
 @$core.Deprecated('Use signOutRequestDescriptor instead')
 const SignOutRequest$json = {

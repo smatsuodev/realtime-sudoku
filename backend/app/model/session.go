@@ -12,6 +12,14 @@ type Session struct {
 	expiresAt time.Time
 }
 
+func NewSessionWithoutID(userID uint, expiresAt time.Time) *Session {
+	return &Session{userID: userID, expiresAt: expiresAt}
+}
+
+func NewSession(id uuid.UUID, userID uint, expiresAt time.Time) *Session {
+	return &Session{id: mo.Some(id), userID: userID, expiresAt: expiresAt}
+}
+
 func (s *Session) IsIDPresent() bool {
 	return s.id.IsPresent()
 }
@@ -36,10 +44,6 @@ func (s *Session) ExpiresAt() time.Time {
 	return s.expiresAt
 }
 
-func NewSessionWithoutID(userID uint, expiresAt time.Time) *Session {
-	return &Session{userID: userID, expiresAt: expiresAt}
-}
-
-func NewSession(id uuid.UUID, userID uint, expiresAt time.Time) *Session {
-	return &Session{id: mo.Some(id), userID: userID, expiresAt: expiresAt}
+func (s *Session) IsExpired() bool {
+	return time.Now().After(s.expiresAt)
 }

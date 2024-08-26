@@ -15,6 +15,12 @@ enum OAuthProvider {
   OAUTH_PROVIDER_GITHUB = 1;
 }
 
+enum SignInStatus {
+  SIGN_IN_STATUS_UNSPECIFIED = 0;
+  SIGN_IN_STATUS_ALREADY_SIGNED_IN = 1;
+  SIGN_IN_STATUS_REQUIRES_SIGNING_IN = 2;
+}
+
 message SignInRequest {
   OAuthProvider provider = 1;
 }
@@ -22,6 +28,7 @@ message SignInRequest {
 message SignInResponse {
   // クライアントはこの URL にリダイレクトして, フローを開始する
   string authorization_url = 1;
+  SignInStatus status = 2;
 }
 
 message SignOutRequest {}
