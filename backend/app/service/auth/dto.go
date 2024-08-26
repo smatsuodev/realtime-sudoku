@@ -18,7 +18,7 @@ type SignInOutput struct {
 }
 
 type SignOutInput struct {
-	SessionID string
+	SessionID uuid.UUID
 }
 
 type SignOutOutput struct{}
@@ -30,7 +30,7 @@ type OAuthCallbackInput struct {
 }
 
 type OAuthCallbackOutput struct {
-	SessionID string
+	SessionID uuid.UUID
 }
 
 type ValidateSessionInput struct {

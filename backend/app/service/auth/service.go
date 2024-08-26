@@ -120,7 +120,7 @@ func (s *Service) OAuthCallback(input OAuthCallbackInput) (OAuthCallbackOutput, 
 	}
 
 	return OAuthCallbackOutput{
-		SessionID: session.ID().String(),
+		SessionID: session.ID(),
 	}, nil
 }
 
